@@ -4,10 +4,14 @@
 ## Changelog
 
 ### v0.1.0
-+ First version: Supporting only Generate Constructor command
++ First version: Supporting only Generate Constructor command.
+With 3 variables or less, the constructor has single line for inputs.
+With 4 or more, the constructor will have single line for each variable.
+
+![constructor](demo.gif)
 
 ## Install
-Get VSCode and grab the extension from the [VSCode Extension Market]
+Get VSCode and grab the extension from the [VSCode Extension Market](https://marketplace.visualstudio.com/items?itemName=toanchivu.tcv-typescript-constructor-generator)
 
 ## Usage
 

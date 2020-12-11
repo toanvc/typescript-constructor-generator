@@ -50,6 +50,7 @@ export function generateClassesList(): IClass[] {
       }
       brackets.open = 0;
       brackets.closed = 0;
+      brackets.hasConstructor = false;
       classes.push({
         name: brackets.name,
         startPos: new vsc.Position(i, 0),
@@ -113,6 +114,7 @@ export function generateCode(classes: IClass[]) {
       for (let i = 0; i < classes.length; i++) {
         const _class = classes[i];
         const end = _class.endPos;
+        printLog(`class;: ${_class.name}, start: ${_class.startPos.line}; end: ${_class.endPos?.line}, hasConstructor: ${_class.hasConstructor}; vars: ${_class.vars.length}`)
         if (currentPos.line >= _class.startPos.line && (end && currentPos.line <= end.line)) {
           if (_class.hasConstructor) {
             showInfoMessage('Your class already has a constructor.');
@@ -172,9 +174,9 @@ function createConstructor(items: IVar[]) {
 }
 
 //Create output channel
-let output = vsc.window.createOutputChannel("Constructor Generator");
+// let output = vsc.window.createOutputChannel("Constructor Generator");
 function printLog(s: string) {
-  output.appendLine(s);
+  // output.appendLine(s);
 }
 
 export function showInfoMessage(message: string) {

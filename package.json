@@ -34,7 +34,7 @@
 		"commands": [
 			{
 				"command": "tcv-typescript-constructor-generator.constructor",
-				"title": "TypeScript: Generate Contructor"
+				"title": "TypeScript: Generate Constructor"
 			}
 		]
 	},
