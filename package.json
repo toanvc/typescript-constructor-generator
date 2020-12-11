@@ -1,0 +1,58 @@
+{
+	"name": "tcv-typescript-constructor-generator",
+	"displayName": "TypeScript constructor generator",
+	"description": "Auto generate constructor for TypeScript object in VS code",
+	"version": "0.1.0",
+	"publisher": "toanchivu",
+	"icon": "icon.png",
+	"galleryBanner": {
+		"color": "#2081bd",
+		"theme": "dark"
+	},
+	"capabilities": {
+		"codeActionProvider": "true"
+	},
+	"engines": {
+		"vscode": "^1.4.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/toanvc/typescript-constructor-generator.git"
+	},
+	"homepage": "https://github.com/toanvc/typescript-constructor-generator",
+	"bugs": {
+		"url": "https://github.com/toanvc/typescript-constructor-generator/issues"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:tcv-typescript-constructor-generator.constructor"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "tcv-typescript-constructor-generator.constructor",
+				"title": "TypeScript: Generate Contructor"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile && npm run lint",
+		"lint": "eslint src --ext ts",
+		"test": "node ./out/test/runTest.js"
+	},
+	"devDependencies": {
+		"eslint": "^7.15.0",
+		"@typescript-eslint/eslint-plugin": "^4.9.0",
+		"@typescript-eslint/parser": "^4.9.0",
+		"typescript": "^4.1.2",
+		"vscode": "^1.1.37",
+		"vsce": "^1.37.6"
+	},
+	"dependencies": {}
+}
