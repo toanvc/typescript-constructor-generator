@@ -1,5 +1,7 @@
 import * as vsc from 'vscode';
 
+const LOG = false;
+
 interface IVar {
   name: string;
   figure: string;
@@ -18,7 +20,7 @@ interface IClass {
 
 const matchers = {
   className: /class\s([a-zA-Z0-9]+)/,
-  varDef: /([a-zA-Z_$][0-9a-zA-Z_$]*)[\s]?\:[\s]?([\.\<\>\{\}\[\]a-zA-Z_$\s<>,]+)/
+  varDef: /([a-zA-Z_$][0-9a-zA-Z_$?]*)[\s]?\:[\s]?([\.\<\>\{\}\[\]a-zA-Z_$\s<>,]+)/
 };
 
 /* Export functions */
@@ -64,22 +66,30 @@ export function generateClassesList(): IClass[] {
     // and add them to the corresponding IClass
     if (brackets.within) {
       let bracketClass = getClass(classes, brackets.name);
-      const matches = line.text.match(matchers.varDef);
-      if (bracketClass && matches) {
-        // push the found variables into the approriate containers
-        bracketClass.vars.push({
-          name: matches[1],
-          figure: matches[1],
-          typeName: matches[2]
-        });
-
-      }
       if (line.text.indexOf('{') !== -1) {
         brackets.open++;
       }
       if (line.text.indexOf('}') !== -1) {
         brackets.closed++;
       }
+
+      // Only add variables of class, ignore function's variables
+      if (brackets.closed + 1 === brackets.open) {
+        const matches = line.text.match(matchers.varDef);
+        if (bracketClass && matches) {
+          // push the found variables into the approriate containers
+          var name = matches[1];
+          if (name.endsWith('?')) {
+            name = name.slice(0, name.length - 1);
+          }
+          bracketClass.vars.push({
+            name: name,
+            figure: matches[1],
+            typeName: matches[2]
+          });
+        }
+      }
+
       if (line.text.indexOf('constructor') !== -1) {
         brackets.hasConstructor = true;
       }
@@ -114,8 +124,8 @@ export function generateCode(classes: IClass[]) {
       for (let i = 0; i < classes.length; i++) {
         const _class = classes[i];
         const end = _class.endPos;
-        printLog(`class;: ${_class.name}, start: ${_class.startPos.line}; end: ${_class.endPos?.line}, hasConstructor: ${_class.hasConstructor}; vars: ${_class.vars.length}`)
-        if (currentPos.line >= _class.startPos.line && (end && currentPos.line <= end.line)) {
+        printLog(`class;: ${_class.name}, start: ${_class.startPos.line}; end: ${_class.endPos?.line}, hasConstructor: ${_class.hasConstructor}; vars: ${_class.vars.length}`);
+        if (currentPos.line >= _class.startPos.line && (end && currentPos.line <= end.line || !end)) {
           if (_class.hasConstructor) {
             showInfoMessage('Your class already has a constructor.');
           } else {
@@ -167,21 +177,25 @@ function createConstructor(items: IVar[]) {
   c += `${breakLine}) {`;
   b = false;
   for (let i = 0; i < items.length; i++) {
-    c += `\n${tab}${tab}this.` + items[i].name + ' = ' + items[i].figure;
+    c += `\n${tab}${tab}this.` + items[i].name + ' = ' + items[i].name;
   }
   c += `\n${tab}}\n`;
   return c;
 }
 
-//Create output channel
-// let output = vsc.window.createOutputChannel("Constructor Generator");
+var output: vsc.OutputChannel | null;
+if (LOG) {
+  //Create output channel
+  output = vsc.window.createOutputChannel("Constructor Generator");
+}
+
 function printLog(s: string) {
-  // output.appendLine(s);
+  output?.appendLine(s);
 }
 
 export function showInfoMessage(message: string) {
-	vsc.window.showInformationMessage(
-		message,
-		{ title: "OK" }
-	);
+  vsc.window.showInformationMessage(
+    message,
+    { title: "OK" }
+  );
 }
