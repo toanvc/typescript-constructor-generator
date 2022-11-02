@@ -1,9 +1,15 @@
 # Change Log
 
-All notable changes to the "tcv-typescript-constructor-generator" extension will be documented in this file.
+### v0.1.0
++ First version: Supporting only Generate Constructor command.
+With 3 variables or less, the constructor has single line for inputs.
+With 4 or more, the constructor will have single line for each variable.
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
 
-## [Unreleased]
-
-- Initial release
+### v0.2.0
+* Fix issues <br>
+#1: Doesn't generate type properly when using lookup type <br>
+#2: ignore annotation arguments<br>
+#4: Issue with variable started by #<br>
+* Support more types of variables
+* Generating constructor without checking existing constructor in class
