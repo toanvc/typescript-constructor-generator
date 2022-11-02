@@ -2,7 +2,7 @@
 	"name": "tcv-typescript-constructor-generator",
 	"displayName": "TypeScript constructor generator",
 	"description": "Auto generate constructor for TypeScript object in VS code",
-	"version": "0.1.2",
+	"version": "0.2.0",
 	"publisher": "toanchivu",
 	"icon": "icon.png",
 	"galleryBanner": {
