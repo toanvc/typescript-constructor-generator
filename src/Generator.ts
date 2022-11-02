@@ -20,7 +20,7 @@ interface IClass {
 
 const matchers = {
   className: /class\s([a-zA-Z0-9]+)/,
-  varDef: /([a-zA-Z_$][0-9a-zA-Z_$?]*)[\s]?\:[\s]?([\.\<\>\{\}\[\]a-zA-Z_$\s<>,]+)/
+  varDef: /([a-zA-Z_$#][0-9a-zA-Z_$?]*)[\s]?\:[\s]?([\.\<\>\{\}\[\]a-zA-Z_$\s<>,]+)/
 };
 
 /* Export functions */
@@ -77,16 +77,25 @@ export function generateClassesList(): IClass[] {
       if (brackets.closed + 1 === brackets.open) {
         const matches = line.text.match(matchers.varDef);
         if (bracketClass && matches) {
-          // push the found variables into the approriate containers
-          var name = matches[1];
-          if (name.endsWith('?')) {
-            name = name.slice(0, name.length - 1);
+          if (!checkAssignedVar(line)) {
+            // push the found variables into the approriate containers
+            var name = matches[1];
+            if (name.endsWith('?')) {
+              name = name.slice(0, -1);
+            }
+            var figure = name;
+            if (figure.startsWith('#') || figure.startsWith('_')) {
+              figure = figure.slice(1);
+            }
+            const colonIndex = line.text.indexOf(':');
+            var typeName = line.text.substring(colonIndex + 1).trim();
+
+            bracketClass.vars.push({
+              name: name,
+              figure: figure,
+              typeName: typeName
+            });
           }
-          bracketClass.vars.push({
-            name: name,
-            figure: matches[1],
-            typeName: matches[2]
-          });
         }
       }
 
@@ -100,16 +109,16 @@ export function generateClassesList(): IClass[] {
         if (bracketClass) {
           bracketClass.endPos = new vsc.Position(i, 0);
           bracketClass.hasConstructor = brackets.hasConstructor;
-
-          if (currentPos.isBefore(bracketClass.startPos) || currentPos.isAfter(bracketClass.endPos)) {
-            bracketClass.vars = [];
-          }
         }
         // done analyzing a class, up to the next
       }
     }
   }
   return classes;
+}
+
+function checkAssignedVar(textLine: vsc.TextLine): boolean {
+  return textLine.text.indexOf('=') >= 0 && textLine.text.indexOf('=>') < 0;
 }
 
 // generate code lines into the current active window based on EType
@@ -126,15 +135,12 @@ export function generateCode(classes: IClass[]) {
         const end = _class.endPos;
         printLog(`class;: ${_class.name}, start: ${_class.startPos.line}; end: ${_class.endPos?.line}, hasConstructor: ${_class.hasConstructor}; vars: ${_class.vars.length}`);
         if (currentPos.line >= _class.startPos.line && (end && currentPos.line <= end.line || !end)) {
-          if (_class.hasConstructor) {
-            showInfoMessage('Your class already has a constructor.');
-          } else {
-            builder.insert(currentPos, createConstructor(classes[i].vars));
-          }
+          builder.insert(currentPos, createConstructor(classes[i].vars));
           return;
         }
       }
     });
+    formatCode();
   } catch (error) {
     printLog(`error ${error}`);
   }
@@ -159,7 +165,7 @@ function createConstructor(items: IVar[]) {
     breakLine = '\n';
     breaking = true;
   }
-  var c = `\n${tab}constructor(${breakLine}`;
+  var c = `${tab}constructor(${breakLine}`;
   var b = false;
   for (let i = 0; i < items.length; i++) {
 
@@ -177,9 +183,9 @@ function createConstructor(items: IVar[]) {
   c += `${breakLine}) {`;
   b = false;
   for (let i = 0; i < items.length; i++) {
-    c += `\n${tab}${tab}this.` + items[i].name + ' = ' + items[i].name;
+    c += `\n${tab}${tab}this.` + items[i].name + ' = ' + items[i].figure;
   }
-  c += `\n${tab}}\n`;
+  c += `\n${tab}}`;
   return c;
 }
 
@@ -191,6 +197,10 @@ if (LOG) {
 
 function printLog(s: string) {
   output?.appendLine(s);
+}
+
+function formatCode() {
+  vsc.commands.executeCommand('editor.action.formatDocument');
 }
 
 export function showInfoMessage(message: string) {
