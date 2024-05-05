@@ -5,11 +5,10 @@ This is inspired by [vscode-gengetset](https://github.com/cybertim/vscode-genget
 
 ## Changelog
 
-### v0.1.0
-+ First version: Supporting only Generate Constructor command.
-With 3 variables or less, the constructor has single line for inputs.
-With 4 or more, the constructor will have single line for each variable.
-
+### v1.0.0
+* Fix issues <br>
+#1: semicolon is considered as part of the attribute type
+ 
 
 ### v0.2.0
 * Fix issues <br>
@@ -18,6 +17,12 @@ With 4 or more, the constructor will have single line for each variable.
 #4: Issue with variable started by #<br>
 * Support more types of variables
 * Generating constructor without checking existing constructor in class
+
+### v0.1.0
++ First version: Supporting only Generate Constructor command.
+With 3 variables or less, the constructor has single line for inputs.
+With 4 or more, the constructor will have single line for each variable.
+
 
 ![constructor](demo.gif)
 

@@ -88,7 +88,7 @@ export function generateClassesList(): IClass[] {
               figure = figure.slice(1);
             }
             const colonIndex = line.text.indexOf(':');
-            var typeName = line.text.substring(colonIndex + 1).trim();
+            var typeName = line.text.substring(colonIndex + 1).replace(';', '').trim();
 
             bracketClass.vars.push({
               name: name,
@@ -165,28 +165,23 @@ function createConstructor(items: IVar[]) {
     breakLine = '\n';
     breaking = true;
   }
-  var c = `${tab}constructor(${breakLine}`;
-  var b = false;
+  var constructor = `${tab}constructor(${breakLine}`;
   for (let i = 0; i < items.length; i++) {
-
-    if (b) {
-      c += `, ${breakLine}`;
+    if (i > 0) {
+      constructor += `, ${breakLine}`;
     }
     if (breaking) {
-      c += `${tab}${tab}`;
+      constructor += `${tab}${tab}`;
     }
-    c += items[i].figure + ': ' + items[i].typeName;
-    if (!b) {
-      b = true;
-    }
+    constructor += items[i].figure + ': ' + items[i].typeName;
   }
-  c += `${breakLine}) {`;
-  b = false;
+
+  constructor += `${breakLine}) {`;
   for (let i = 0; i < items.length; i++) {
-    c += `\n${tab}${tab}this.` + items[i].name + ' = ' + items[i].figure;
+    constructor += `\n${tab}${tab}this.` + items[i].name + ' = ' + items[i].figure;
   }
-  c += `\n${tab}}`;
-  return c;
+  constructor += `\n${tab}}`;
+  return constructor;
 }
 
 var output: vsc.OutputChannel | null;
@@ -201,11 +196,4 @@ function printLog(s: string) {
 
 function formatCode() {
   vsc.commands.executeCommand('editor.action.formatDocument');
-}
-
-export function showInfoMessage(message: string) {
-  vsc.window.showInformationMessage(
-    message,
-    { title: "OK" }
-  );
 }

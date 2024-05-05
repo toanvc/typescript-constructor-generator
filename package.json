@@ -2,7 +2,7 @@
 	"name": "tcv-typescript-constructor-generator",
 	"displayName": "TypeScript constructor generator",
 	"description": "Auto generate constructor for TypeScript object in VS code",
-	"version": "0.2.0",
+	"version": "1.0.0",
 	"publisher": "toanchivu",
 	"icon": "icon.png",
 	"galleryBanner": {
@@ -13,7 +13,7 @@
 		"codeActionProvider": "true"
 	},
 	"engines": {
-		"vscode": "^1.4.0"
+		"vscode": "^1.85.0"
 	},
 	"repository": {
 		"type": "git",
@@ -50,9 +50,9 @@
 		"eslint": "^7.15.0",
 		"@typescript-eslint/eslint-plugin": "^4.9.0",
 		"@typescript-eslint/parser": "^4.9.0",
-		"typescript": "^4.1.2",
+		"typescript": "^5.4.5",
 		"vscode": "^1.1.37",
-		"vsce": "^1.37.6"
+		"vsce": "^2.15.0"
 	},
 	"dependencies": {}
 }
