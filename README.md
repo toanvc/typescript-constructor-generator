@@ -1,7 +1,7 @@
 This is inspired by [vscode-gengetset](https://github.com/cybertim/vscode-gengetset). I simplify it with only constructor generator and modify it with my purpose. Also I fixed the issue when the extension command can not work for multiple classes in one file. Since that project isn't maintained and out of date, I'm creating this to support my current need.
 
 # Auto generate Constructor
-(without semicolon). I'll update options to support both semicolon and non-semicolon.
+You now can use to generate the constructor with many variables in a class. It supports both one class per file or multiple classes per file. 
 
 ## Changelog
 
