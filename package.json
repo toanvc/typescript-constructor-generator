@@ -26,15 +26,12 @@
 	"categories": [
 		"Other"
 	],
-	"activationEvents": [
-		"onCommand:tcv-typescript-constructor-generator.constructor"
-	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
 				"command": "tcv-typescript-constructor-generator.constructor",
-				"title": "TypeScript: Generate Constructor"
+				"title": "TypeScript: Generate Constructor1"
 			}
 		]
 	},
@@ -47,12 +44,17 @@
 		"test": "node ./out/test/runTest.js"
 	},
 	"devDependencies": {
-		"eslint": "^7.15.0",
-		"@typescript-eslint/eslint-plugin": "^4.9.0",
-		"@typescript-eslint/parser": "^4.9.0",
+		"@types/vscode": "^1.89.0",
+		"@typescript-eslint/eslint-plugin": "^7.8.0",
+		"@typescript-eslint/parser": "^7.8.0",
+		"@vscode/test-electron": "^2.3.9",
+		"@vscode/vsce": "^2.26.1",
+		"eslint": "^8.56.0",
+		"eslint-config-standard": "17.1.0",
 		"typescript": "^5.4.5",
-		"vscode": "^1.1.37",
-		"vsce": "^2.15.0"
+		"vscode-test": "^1.6.1"
 	},
-	"dependencies": {}
+	"dependencies": {
+		
+	}
 }
